@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Strings Effect</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; background: black; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+<script>
+let strings = [];
+let numStrings = 8;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  for (let i = 0; i < numStrings; i++) {
+    strings.push(new StringLine(i * height / numStrings + 50));
+  }
+}
+
+function draw() {
+  background(0);
+  stroke(255);
+  strokeWeight(2);
+  for (let s of strings) {
+    s.update();
+    s.display();
+  }
+}
+
+function mouseMoved() {
+  for (let s of strings) {
+    s.react(mouseX, mouseY);
+  }
+}
+
+class StringLine {
+  constructor(y) {
+    this.y = y;
+    this.points = [];
+    for (let x = 0; x < width; x += 20) {
+      this.points.push({ x, y });
+    }
+  }
+
+  react(mx, my) {
+    for (let p of this.points) {
+      let d = dist(mx, my, p.x, p.y);
+      if (d < 100) {
+        p.y += sin(frameCount * 0.3) * (100 - d) * 0.05;
+      }
+    }
+  }
+
+  update() {
+    for (let p of this.points) {
+      p.y += (this.y - p.y) * 0.05;
+    }
+  }
+
+  display() {
+    noFill();
+    beginShape();
+    for (let p of this.points) vertex(p.x, p.y);
+    endShape();
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+</script>
+</body>
+</html>
