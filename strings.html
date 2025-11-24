@@ -42,17 +42,29 @@ function draw() {
   t += 0.02;
 }
 
-function drawString(amp) {
+function drawString() {
   beginShape();
   noFill();
   
-  for (let x = 0; x < width; x += 10) {
-    let wave = sin(x * freq + t) * amp;
-    vertex(x, height / 2 + wave);
-  }
+  for (let x = 0; x < width; x += 8) {
 
-  endShape();
-}
+    // базовое небольшое дрожание
+    let baseWave = sin(x * 0.02 + t) * 6;
+
+    // расстояние до мыши
+    let d = abs(mouseX - x);
+
+    // локальная амплитуда
+    let localKick = 0;
+
+    if (d < 150) {
+      // Чем ближе к мыши — тем сильнее толчок
+      let strength = map(d, 0, 150, 1, 0);
+      localKick = sin(t * 10 + x * 0.05) * (30 * strength);
+    }
+
+    let y = height/2 + base
+
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
@@ -60,3 +72,4 @@ function windowResized() {
 </script>
 </body>
 </html>
+
