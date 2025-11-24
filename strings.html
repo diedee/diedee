@@ -63,6 +63,13 @@ function drawString() {
       localKick = sin(t * 10 + x * 0.05) * (30 * strength);
     }
 
+    let y = height/2 + baseWave + localKick;
+    vertex(x, y);
+  }
+
+  endShape();
+}
+
     let y = height/2 + base
 
 
